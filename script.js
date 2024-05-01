@@ -1,0 +1,57 @@
+document.addEventListener('DOMContentLoaded', function () {
+  // Initialize Leaflet map
+  var map = L.map('map').setView([0, 0], 2); // Set initial center and zoom level
+  
+  var sidebar = L.control.sidebar('sidebar', {
+    position: 'left'
+  })
+
+  map.addControl(sidebar);
+
+  // Add a tile layer (e.g., OpenStreetMap) to the map
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://data.vatsim.net/v3/vatsim-data.json');
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  // Fetch and display pilot locations with custom icons and rotation
+  fetchData().then(data => {
+    if (!data) {
+      console.error('No data available');
+      return;
+    }
+
+    const pilots = data.pilots;
+    const validPilots = pilots.filter(pilot => pilot.latitude && pilot.longitude);
+
+    validPilots.forEach(pilot => {
+      // Calculate heading angle (optional, based on your data structure)
+      const heading = pilot.heading || 0; // Default to 0 if heading data is missing
+
+      // Create custom icon with rotation based on heading and reduced size
+      const marker = L.marker([pilot.latitude, pilot.longitude], {
+        icon: L.divIcon({
+          className: 'custom-div-icon',
+          html: `<img src="/images/aircraft.png" style="transform: rotate(${heading}deg); width: 24px; height: 24px;" />`
+        })
+      }).addTo(map);
+
+      // Add click event listener to the marker
+      marker.on('click', function () {
+        setTimeout(function (){
+          sidebar.show();
+        }, 500);
+        sidebar.setContent('Hello World!')
+      });
+    });
+  });  
+});

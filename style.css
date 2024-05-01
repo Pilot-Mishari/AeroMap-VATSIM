@@ -1,0 +1,24 @@
+.custom-div-icon img {
+    width: 24px; 
+    height: 24px;
+  }
+#map{
+    height: 100vh;
+    width: 100vw;
+}
+
+body{
+    overflow: hidden;
+}
+#sidebar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+/*
+token: 8ef1d2a6192312a17fa3244b068e9af902305b0adb8c73b3ef9754f5255992e86e7ba4279e6e6a9074ddd6320f9e424e
+*/
